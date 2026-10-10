@@ -1,0 +1,13 @@
+{
+  "name": "idor-ctf-lab",
+  "version": "1.0.0",
+  "description": "Easy IDOR CTF Lab",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6"
+  }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container wide">
+    <div class="header">
+      <h1>📊 Employee Dashboard</h1>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <p>Logged in as: <strong id="currentUser"></strong></p>
+
+    <div class="card">
+      <h2>📢 Announcements</h2>
+      <ul>
+        <li>Q4 all-hands meeting next Friday at 3 PM.</li>
+        <li>Password policy updated — please rotate your credentials.</li>
+        <li>Reminder: the admin panel is for <strong>administrators only</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="card admin-card" id="adminCard" style="display:none;">
+      <h2>🔧 Admin Panel</h2>
+      <p>Restricted area. Welcome, administrator.</p>
+      <button id="getFlagBtn">Retrieve System Flag</button>
+      <div id="flagResult"></div>
+    </div>
+
+    <div class="card">
+      <h2>📁 My Documents</h2>
+      <p>No documents uploaded yet.</p>
+    </div>
+  </div>
+
+  <script>
+    let currentRole = null;
+
+    async function loadMe() {
+      const res = await fetch('/api/me');
+      if (!res.ok) { window.location.href = '/'; return; }
+      const user = await res.json();
+      currentRole = user.role;
+
+      document.getElementById('currentUser').textContent =
+        `${user.username} (role: ${user.role})`;
+
+      if (user.role === 'admin') {
+        document.getElementById('adminCard').style.display = 'block';
+      }
+    }
+
+    document.getElementById('getFlagBtn')?.addEventListener('click', async () => {
+      const res = await fetch('/api/admin/flag');
+      const result = document.getElementById('flagResult');
+      if (res.ok) {
+        const data = await res.json();
+        result.innerHTML = `<div class="flag">🚩 ${data.flag}</div>`;
+      } else {
+        result.innerHTML = `<div class="error">Access denied.</div>`;
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/';
+    });
+
+    loadMe();
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container wide">
+    <div class="header">
+      <h1>📊 Dashboard</h1>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <p>Signed in as <strong id="currentUser"></strong></p>
+
+    <div class="card">
+      <h2>🔐 Your Session Token</h2>
+      <p class="hint">Your JWT is stored in the <code>session_token</code> cookie:</p>
+      <pre id="tokenDisplay">Loading...</pre>
+      <button id="decodeBtn">Decode Token</button>
+      <pre id="decodedToken"></pre>
+    </div>
+
+    <div class="card" id="adminCard" style="display:none;">
+      <h2>🛡️ Admin Console</h2>
+      <p>You have administrator privileges.</p>
+      <button id="getFlagBtn">Retrieve Flag</button>
+      <button id="listUsersBtn">List Users</button>
+      <div id="adminOutput"></div>
+    </div>
+
+    <div class="card">
+      <h2>📰 News</h2>
+      <ul>
+        <li>JWT-based auth is now live — no more server-side sessions.</li>
+        <li>Tokens are stateless and self-contained.</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    async function loadMe() {
+      const res = await fetch('/api/me');
+      if (!res.ok) { window.location.href = '/'; return; }
+      const user = await res.json();
+      document.getElementById('currentUser').textContent =
+        `${user.username} (role: ${user.role})`;
+
+      if (user.role === 'admin') {
+        document.getElementById('adminCard').style.display = 'block';
+      }
+    }
+
+    const token = getCookie('session_token');
+    document.getElementById('tokenDisplay').textContent = token || 'No token found';
+
+    document.getElementById('decodeBtn').addEventListener('click', () => {
+      const parts = token.split('.');
+      const header = JSON.parse(atob(parts[0]));
+      const payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+      document.getElementById('decodedToken').textContent =
+        'Header:  ' + JSON.stringify(header, null, 2) + '\n\n' +
+        'Payload: ' + JSON.stringify(payload, null, 2);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/';
+    });
+
+    document.getElementById('getFlagBtn')?.addEventListener('click', async () => {
+      const res = await fetch('/api/admin/flag');
+      const out = document.getElementById('adminOutput');
+      if (res.ok) {
+        const data = await res.json();
+        out.innerHTML = `<div class="flag">🚩 ${data.flag}</div>`;
+      } else {
+        out.innerHTML = `<div class="error">Access denied.</div>`;
+      }
+    });
+
+    document.getElementById('listUsersBtn')?.addEventListener('click', async () => {
+      const res = await fetch('/api/admin/users');
+      const out = document.getElementById('adminOutput');
+      if (res.ok) {
+        const data = await res.json();
+        out.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } else {
+        out.innerHTML = `<div class="error">Access denied.</div>`;
+      }
+    });
+
+    loadMe();
+  </script>
+</body>
+</html>

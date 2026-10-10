@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stego Challenge</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🖼️ Steganography Challenge</h1>
+    <p class="subtitle">Metadata Edition — Easy</p>
+
+    <div class="card">
+      <h2>🎯 Challenge Question</h2>
+      <p class="question">Who is the author of this image — who captured it?</p>
+      <p>The photographer's name is hidden inside the image itself. Dig into it, find the author, then submit what you find.</p>
+      <p class="hint">Hint: sometimes images carry more than pixels — the camera never forgets who shot the picture...</p>
+    </div>
+
+    <div class="card">
+      <h2>📷 Challenge Image</h2>
+      <img src="/challenge.jpg" alt="Challenge" class="challenge-img">
+      <div class="actions">
+        <a href="/download" download class="btn">⬇️ Download Image</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🚩 Submit Author Name</h2>
+      <p class="hint">Found the author? Enter it below.</p>
+      <form id="flagForm">
+        <input type="text" id="flagInput" placeholder="FLAG FORMAT: GR{author_name}" autocomplete="off" required>
+        <button type="submit">Submit</button>
+      </form>
+      <div id="submitResult"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('flagForm');
+    const result = document.getElementById('submitResult');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const flag = document.getElementById('flagInput').value;
+
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flag })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        result.innerHTML = `<div class="success-box">✅ ${data.message}</div>`;
+      } else {
+        result.innerHTML = `<div class="fail-box">❌ ${data.error || 'Submission failed.'}</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

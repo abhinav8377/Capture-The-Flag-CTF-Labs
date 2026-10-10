@@ -1,0 +1,13 @@
+{
+  "name": "image-stego-ctf-lab",
+  "version": "1.0.0",
+  "description": "Image Steganography CTF Lab (Metadata)",
+  "main": "server.js",
+  "scripts": {
+    "generate": "node generate-image.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

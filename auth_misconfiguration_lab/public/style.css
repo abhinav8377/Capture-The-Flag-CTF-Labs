@@ -1,0 +1,109 @@
+* { box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1020;
+  color: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  background: #131a2e;
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #1f2a44;
+}
+
+.container.wide { max-width: 720px; }
+
+h1 { margin-top: 0; color: #60a5fa; }
+h2 { color: #93c5fd; font-size: 1.05rem; margin-top: 0; }
+.subtitle { color: #94a3b8; margin-bottom: 22px; }
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  background: #0b1020;
+  border: 1px solid #24314f;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+button {
+  padding: 12px;
+  margin-top: 10px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover { background: #2563eb; }
+
+#loginForm button { width: 100%; }
+
+#message { margin-top: 16px; padding: 10px; border-radius: 6px; display: none; }
+.success { display: block !important; background: #064e3b; color: #d1fae5; }
+.error { display: block !important; background: #7f1d1d; color: #fee2e2; }
+
+.footer-note {
+  margin-top: 24px;
+  border-top: 1px solid #1f2a44;
+  padding-top: 16px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.footer-note code { color: #facc15; }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header button { width: auto; padding: 8px 16px; margin: 0; }
+
+.card {
+  background: #0b1020;
+  padding: 18px;
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid #1f2a44;
+}
+
+.admin-card { border-color: #f59e0b; }
+
+ul { padding-left: 20px; color: #cbd5e1; }
+li { margin: 6px 0; }
+
+.flag {
+  margin-top: 12px;
+  padding: 12px;
+  background: #064e3b;
+  color: #d1fae5;
+  border-radius: 6px;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.error {
+  margin-top: 12px;
+  padding: 10px;
+  background: #7f1d1d;
+  color: #fee2e2;
+  border-radius: 6px;
+}

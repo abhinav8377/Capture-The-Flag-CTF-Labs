@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IDOR Lab - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 SecureCorp Portal</h1>
+    <p class="subtitle">IDOR CTF Challenge — Easy</p>
+
+    <div class="hint-box">
+      <strong>Test Credentials:</strong><br>
+      Username: <code>john</code> | Password: <code>password</code>
+    </div>
+
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        msg.textContent = '✅ Login successful! Redirecting...';
+        msg.className = 'success';
+        setTimeout(() => window.location.href = '/dashboard.html', 800);
+      } else {
+        msg.textContent = '❌ ' + (data.error || 'Login failed');
+        msg.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>

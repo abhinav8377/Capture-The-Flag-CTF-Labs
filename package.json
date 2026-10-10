@@ -1,0 +1,40 @@
+{
+  "name": "ctf-labs-collection",
+  "version": "1.0.0",
+  "description": "A collection of web security CTF challenges for learning common vulnerabilities",
+  "scripts": {
+    "install-all": "cd auth_misconfiguration_lab && npm install && cd ../idor_ctf_lab && npm install && cd ../weak_jwt_auth_lab && npm install && cd ../image_stegnography_lab && npm install",
+    "start:auth": "cd auth_misconfiguration_lab && npm start",
+    "start:idor": "cd idor_ctf_lab && npm start",
+    "start:jwt": "cd weak_jwt_auth_lab && npm start",
+    "start:stego": "cd image_stegnography_lab && npm start",
+    "generate:stego": "cd image_stegnography_lab && npm run generate"
+  },
+  "keywords": [
+    "ctf",
+    "security",
+    "web-security",
+    "hacking",
+    "learning",
+    "educational",
+    "vulnerability",
+    "idor",
+    "jwt",
+    "authentication",
+    "steganography"
+  ],
+  "author": "CTF Labs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/ctf-labs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ctf-labs/issues"
+  },
+  "homepage": "https://github.com/yourusername/ctf-labs#readme",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

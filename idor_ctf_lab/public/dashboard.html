@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container wide">
+    <div class="header">
+      <h1>📊 User Dashboard</h1>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <p>Welcome, <strong id="currentUser"></strong></p>
+
+    <h2>Your Profile</h2>
+    <div id="ownProfile" class="profile-card">Loading...</div>
+
+    <hr>
+
+    <h2>🔎 Lookup User Profile</h2>
+    <p class="hint">Enter a user ID to view their public profile:</p>
+    <div class="lookup">
+      <input type="number" id="userIdInput" placeholder="User ID" value="2">
+      <button id="lookupBtn">Fetch Profile</button>
+    </div>
+
+    <div id="lookupResult" class="profile-card hidden"></div>
+  </div>
+
+  <script>
+    async function loadMe() {
+      const res = await fetch('/api/me');
+      if (!res.ok) { window.location.href = '/'; return; }
+      const user = await res.json();
+      document.getElementById('currentUser').textContent =
+        `${user.username} (ID: ${user.id}, Role: ${user.role})`;
+      renderProfile(user, 'ownProfile', false);
+    }
+
+    function renderProfile(user, elementId, showSecret) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = `
+        <p><strong>ID:</strong> ${user.id}</p>
+        <p><strong>Username:</strong> ${user.username}</p>
+        <p><strong>Email:</strong> ${user.email}</p>
+        <p><strong>Role:</strong> ${user.role}</p>
+        ${user.secret ? `<p class="secret"><strong>Private Note:</strong> ${user.secret}</p>` : ''}
+      `;
+    }
+
+    async function lookupUser() {
+      const id = document.getElementById('userIdInput').value;
+      const result = document.getElementById('lookupResult');
+      result.classList.remove('hidden');
+
+      const res = await fetch(`/api/user/${id}`);
+      if (!res.ok) {
+        result.innerHTML = '<p class="error">User not found.</p>';
+        return;
+      }
+      const user = await res.json();
+      renderProfile(user, 'lookupResult', true);
+    }
+
+    document.getElementById('lookupBtn').addEventListener('click', lookupUser);
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/';
+    });
+
+    loadMe();
+  </script>
+</body>
+</html>
